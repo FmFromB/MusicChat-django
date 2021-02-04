@@ -12,8 +12,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+from whitenoise import WhiteNoise
+from pathlib import Path
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,30 +41,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'django_summernote',
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
     'chat_room',
+
 ]
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ddivb84i2e4dov',
-        'USER': 'vumpaedcknwjnr',
-        'PASSWORD': '495d7ef868554eef12a6d159bdc78dc939f03d0bd5e03c421fea1adfdb36c0d1',
-        'HOST': 'ec2-50-16-108-254.compute-1.amazonaws.com',
+        'NAME': 'd6ucp4n5462tg',
+        'USER': 'swwlqbjjycsohv',
+        'PASSWORD': '5bc396069e45dacfba9585f861617c12cc7beb837d191f6ae07cff47beb60750',
+        'HOST': 'ec2-34-224-254-126.compute-1.amazonaws.com',
         'PORT': '5432',
     }
 }
-
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -71,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'MusicChat.urls'
@@ -141,20 +141,15 @@ SITE = 1
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
 
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticated",
+        'rest_framework.permissions.IsAuthenticated',
     ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
     'PAGE_SIZE': 10,
     'EXCEPTION_HANDLER': 'rest_framework_json_api.exceptions.exception_handler',
@@ -172,9 +167,31 @@ REST_FRAMEWORK = {
     'DEFAULT_METADATA_CLASS': 'rest_framework_json_api.metadata.JSONAPIMetadata',
 }
 
-CORS_ORIGIN_ALLOW_ALL = True
+STATIC_URL = '/static/'
 
-try:
-    from .local_settings import *
-except ImportError:
-    from .prod_settings import *
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = (
+        'GET',
+        'POST',
+        'PUT',
+        'PATCH',
+        'DELETE',
+        'OPTIONS'
+)
+
+CORS_ALLOW_HEADERS = (
+        'Access-Control-Allow-Origin',
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'origin',
+        'authorization',
+        'x-csrftoken'
+)
+
+AUTH_USER_MODEL = "chat_room.User" 
