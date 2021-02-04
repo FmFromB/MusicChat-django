@@ -24,7 +24,7 @@ class ChatView(APIView):
         chat = Chat.objects.filter(room=room)
         chat = Chat.objects.order_by('-id')
         serializer = ChatSerializer(chat, many=True)
-        return Response(serializer.data)
+        return Response({"data": serializer.data})
 
     def post(self, request):
         if request.method == 'POST':
