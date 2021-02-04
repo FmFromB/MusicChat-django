@@ -3,8 +3,14 @@ from django.db.models import Q
 from rest_framework.response import Response 
 from rest_framework import permissions
 from rest_framework.views import APIView
+from django.views.generic import *
 from .serializers import (RoomSerializers, ChatSerializer, ChatPostSerializer, UserSerializer)
 from .models import *
+
+class HomeListView(ListView):
+    model = User
+    template_name = 'home.html'
+    context_object_name = 'home'
 
 class RoomView(APIView):
     permission_classes = [permissions.IsAuthenticated]
